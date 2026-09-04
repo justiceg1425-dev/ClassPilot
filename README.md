@@ -15,6 +15,7 @@ student information is ever entered.
 | `docs/BRD.md` | Business requirements. Numbered FR / NFR / BR IDs. |
 | `docs/architecture.md` | Stack, ADRs, free-tier budget, iOS delivery reality |
 | `docs/implementation-plan.md` | Roadmap across all three phases, blocker register, design-pass point |
+| `docs/environment-setup.md` | Machine split (Windows vs Mac), Supabase project setup, secrets |
 | `docs/data-model.md` | The temporal schedule model and why it is shaped that way |
 | `docs/phase-1-backlog.md` | Ordered milestones M0–M6 with requirement mappings |
 | `docs/traceability.md` | Requirement → test → status |
