@@ -13,7 +13,7 @@ Update in the same PR that implements the requirement.
 | FR-201 | BR-01 | 1 | M2.2 | | | Not started |
 | FR-202 | BR-01 | 1 | M2.3 | | | Not started |
 | FR-203 | BR-01 | 1 | M2.3 | | | Not started |
-| FR-204 | BR-01 | 1 | M0.2 / M2.4 | | | Not started |
+| FR-204 | BR-01 | 1 | M0.2 / M2.4 | packages/shared `getTeachingDays` | shared/src/temporal/teaching-days.test.ts | In progress (engine done; UI at M2.4) |
 | FR-205 | BR-01 | 1 | M2.5 | | | Not started |
 | FR-206 | BR-07 | 1 | M2.6 | | | Not started |
 | FR-207 | BR-07 | 1 | M2.1 | | | Not started |
@@ -25,9 +25,9 @@ Update in the same PR that implements the requirement.
 | FR-403 | BR-02 | 1 | M3.2 | | | Not started |
 | FR-404 | BR-02 | 1 | M3.3 | | | Not started |
 | FR-407 | BR-07 | 1 | M3.5 | | | Not started |
-| FR-501 | BR-02 | 1 | M0.3 / M4.1 | | | Not started |
+| FR-501 | BR-02 | 1 | M0.3 / M4.1 | packages/shared `resolveDay`; ADR-0001 | shared/src/temporal/resolve-day.test.ts | In progress (resolver done; UI at M4.1) |
 | FR-502 | BR-02 | 1 | M4.2 | | | Not started |
-| FR-506 | BR-02 | 1 | M4.4 | | | Not started |
+| FR-506 | BR-02 | 1 | M0.3 / M4.4 | packages/shared `resolveDay` (adhoc/cancelled); ADR-0001 | shared/src/temporal/resolve-day.test.ts | In progress (resolver done; UI at M4.4) |
 | FR-507 | BR-02 | 1 | M4.5 | | | Not started |
 | FR-508 | BR-09 | 1 | M4.6 | | | Not started |
 | FR-801 | BR-04 | 1 | M5.2 | | | Not started |
@@ -44,5 +44,5 @@ Update in the same PR that implements the requirement.
 | FR-1506 | BR-09 | 1 | M6.4 | | | Not started |
 | NFR-11 | BR-08 | 1 | M1.9 | | | Not started |
 | NFR-18 | — | 1 | M3.7 / M5.3 | | | Not started |
-| NFR-23 | — | 1 | all | | | Not started |
+| NFR-23 | — | 1 | all | | shared/src/temporal/*.test.ts (49 tests; resolve-day property test) | In progress |
 | NFR-25 | — | 1 | M1.8 | | | Not started |

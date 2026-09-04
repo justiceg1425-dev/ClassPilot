@@ -28,9 +28,9 @@ Version 0.1 — 4 September 2026.
 
 | Chunk | Contents | State |
 |---|---|---|
-| **1A** | Repo skeleton: pnpm workspace + Turborepo, TS strict base config, ESLint 9 flat + Prettier, `packages/shared` scaffold, M0.1 domain types + toolchain-proving test, `ci.yml`, this plan, B2 schema fix | **in progress** |
-| 1B | M0.2–M0.6 — `getTeachingDays`, `resolveDay`, the eight resolution cases, the property test, the multi-grade display ADR | next |
-| 2 | M1 — Foundations (Supabase, auth, schema+RLS, seed, negative-test harness, keepalive, backup) | not started |
+| **1A** | Repo skeleton: pnpm workspace + Turborepo, TS strict base config, ESLint 9 flat + Prettier, `packages/shared` scaffold, M0.1 domain types + toolchain-proving test, `ci.yml`, this plan, B2 schema fix | **done** — CI green |
+| **1B** | M0.2–M0.6 — `PlainDate`/`PlainTime`, `getTeachingDays` + `getTeachingWeeks`, `resolveDay`, the eight resolution cases + property test (49 tests, ~99% cover), ADR-0001 (multi-grade display, OQ-04) | **done** — CI green |
+| 2 | M1 — Foundations (Supabase, auth, schema+RLS, seed, negative-test harness, keepalive, backup) | next |
 
 ---
 
