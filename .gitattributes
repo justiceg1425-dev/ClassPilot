@@ -1,0 +1,12 @@
+# Normalise line endings to LF everywhere. CI runs on Linux; dev is on Windows.
+# Prettier emits LF, so this keeps working copies and CI in agreement.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

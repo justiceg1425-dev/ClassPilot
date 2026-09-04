@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+coverage/
+pnpm-lock.yaml
+
+# Markdown docs and YAML are authored and formatted by hand (requirement tables
+# in particular do not survive a reflow). Prettier governs code only.
+*.md
+*.yml
+*.yaml

@@ -1,0 +1,31 @@
+{
+  "name": "classpilot",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Classroom planning and management platform for primary-school teachers. Personal learning / portfolio project — non-commercial, synthetic data only.",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json}\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.5",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.19.1"
+  }
+}

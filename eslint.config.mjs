@@ -1,0 +1,33 @@
+// @ts-check
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['**/dist/**', '**/.next/**', '**/.turbo/**', '**/coverage/**', '**/node_modules/**'],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      // CLAUDE.md conventions: no `any`, no unexplained non-null assertions.
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/explicit-function-return-type': ['warn', { allowExpressions: true }],
+      '@typescript-eslint/consistent-type-imports': 'error',
+    },
+  },
+  {
+    // Tests may use non-null assertions on known-good fixtures.
+    files: ['**/*.test.ts', '**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
+);
