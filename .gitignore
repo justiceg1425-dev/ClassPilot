@@ -20,6 +20,11 @@ test-results/
 .env
 .env.*
 !.env.example
+keys_tokens
+keys_tokens.*
+*.secret
+*secrets*
+
 
 # supabase local
 supabase/.branches/
