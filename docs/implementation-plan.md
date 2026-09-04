@@ -29,8 +29,17 @@ Version 0.1 — 4 September 2026.
 | Chunk | Contents | State |
 |---|---|---|
 | **1A** | Repo skeleton: pnpm workspace + Turborepo, TS strict base config, ESLint 9 flat + Prettier, `packages/shared` scaffold, M0.1 domain types + toolchain-proving test, `ci.yml`, this plan, B2 schema fix | **done** — CI green |
-| **1B** | M0.2–M0.6 — `PlainDate`/`PlainTime`, `getTeachingDays` + `getTeachingWeeks`, `resolveDay`, the eight resolution cases + property test (49 tests, ~99% cover), ADR-0001 (multi-grade display, OQ-04) | **done** — CI green |
-| 2 | M1 — Foundations (Supabase, auth, schema+RLS, seed, negative-test harness, keepalive, backup) | next |
+| **1B** | M0.2–M0.6 — `PlainDate`/`PlainTime`, `getTeachingDays` + `getTeachingWeeks`, `resolveDay`, the eight resolution cases + property test (50 tests, 100% line cover), ADR-0001 (multi-grade display, OQ-04) | **done** — CI green |
+| **2A** | M1.2–M1.4 — Supabase CLI + `supabase/config.toml`, `20260904090000_phase1_schema.sql` applied to the hosted project (16 tables, RLS + policies + 2 exclusion constraints + triggers verified), `pnpm db:types` → `packages/shared/src/db/database.types.ts`, `scripts/db.mjs` + `db:*` scripts, corporate-proxy CA workaround | **done** (branch `m1/db-foundations`) |
+| 2B | M1.1 remainder — `apps/web` (Next.js) + Supabase client wiring; M1.5–M1.7 auth (register / verify / login / reset / delete) incl. B3 `handle_new_user()` trigger | next |
+| 2C | M1.8 seed script · M1.9 RLS negative-test harness · M1.10 CI DB job · M1.11 keepalive secrets · M1.12 backup workflow | after 2B |
+
+### Corporate-network constraints discovered (Windows dev machine)
+
+- Docker is policy-blocked → no local Supabase stack on Windows (known — the Mac has it).
+- **The PostgreSQL wire protocol is firewall-blocked** (TCP connects, protocol bytes are dropped). `supabase db push` / `migration list` / pgTAP cannot run from Windows. Schema changes go through the **Management API** (`pnpm db:query`, `pnpm db:types` — HTTPS 443).
+- A **TLS-inspection proxy** re-signs HTTPS; Node rejects it. `scripts/export-corp-ca.ps1` exports the Windows trust store to `.certs/corp-ca.pem` (git-ignored); `scripts/db.mjs` loads it automatically.
+- **`gh secret set` and direct Management-API `curl` are blocked by the tool sandbox** — the two keepalive GitHub secrets (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) must be set by the owner.
 
 ---
 

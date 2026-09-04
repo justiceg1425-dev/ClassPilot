@@ -46,3 +46,5 @@ export {
 } from './temporal/teaching-days.js';
 
 export { resolveDay, type ResolveDayInput } from './temporal/resolve-day.js';
+
+export type { Database, Json, TableRow, TableInsert, TableUpdate } from './db/index.js';

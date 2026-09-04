@@ -19,16 +19,18 @@ student information is ever entered.
 | `docs/data-model.md` | The temporal schedule model and why it is shaped that way |
 | `docs/phase-1-backlog.md` | Ordered milestones M0–M6 with requirement mappings |
 | `docs/traceability.md` | Requirement → test → status |
-| `db/001_phase1_schema.sql` | Phase 1 schema with RLS policies |
+| `supabase/migrations/` | Forward-only SQL migrations (Phase 1 schema + RLS policies) |
 
 ## Getting started
 
 ```bash
 pnpm install
-supabase start                 # local Postgres + Auth
-pnpm db:migrate
-pnpm db:seed
-pnpm dev
+pnpm test                      # packages/shared — the schedule engine
+
+# database (see docs/environment-setup.md):
+#   Mac:      supabase start && supabase db reset
+#   Windows:  pnpm db:query -- -f supabase/migrations/<file>.sql   # Management API
+pnpm db:types                  # regenerate packages/shared/src/db/database.types.ts
 ```
 
 ## Stack

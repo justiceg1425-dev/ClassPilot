@@ -56,11 +56,16 @@ apps/
   web/            Next.js app
   mobile/         Expo app
 packages/
-  shared/         types, Zod schemas, domain logic (date/schedule math lives HERE)
-  db/             migrations, seed scripts, generated types
+  shared/         types, Zod schemas, domain logic (date/schedule math lives HERE),
+                  generated DB types in src/db/database.types.ts
+supabase/
+  migrations/     forward-only SQL migrations (RLS policies in the same file)
+  config.toml
+scripts/          db.mjs (Supabase CLI wrapper), export-corp-ca.ps1
 docs/
-db/
 ```
+
+A `packages/db/` for the seed script arrives with M1.8.
 
 **Domain logic goes in `packages/shared`, never duplicated in a client.** The schedule
 resolution logic in particular is used by both web and mobile and must have one
@@ -203,9 +208,11 @@ pnpm install                      # install workspace
 pnpm dev                          # web + mobile dev servers
 pnpm --filter web dev             # web only
 pnpm --filter mobile start        # Expo dev server (scan QR with Expo Go)
-pnpm db:migrate                   # apply migrations to local Supabase
-pnpm db:seed                      # load synthetic dataset (NFR-25)
-pnpm db:types                     # regenerate TS types from schema
+pnpm db:query -- -f <file.sql>    # run SQL on the linked project (Management API)
+pnpm db:push                      # apply migrations (direct PG conn — Mac only)
+pnpm db:reset                     # reset the local stack (Docker — Mac only)
+pnpm db:seed                      # load synthetic dataset (NFR-25) — arrives M1.8
+pnpm db:types                     # regenerate packages/shared/src/db/database.types.ts
 pnpm test                         # unit tests
 pnpm test:e2e                     # Playwright
 pnpm lint && pnpm typecheck

@@ -11,6 +11,7 @@ export default defineConfig({
         'src/index.ts',
         // Pure type declarations — no executable code to cover.
         'src/temporal/types.ts',
+        'src/db/**',
       ],
       thresholds: {
         // The schedule resolver is the highest-risk unit in the codebase.
