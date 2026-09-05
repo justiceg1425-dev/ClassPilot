@@ -43,3 +43,6 @@ Thumbs.db
 *.log
 npm-debug.log*
 pnpm-debug.log*
+
+# corporate TLS-inspection CA bundle (Windows dev only, machine-specific)
+.certs/

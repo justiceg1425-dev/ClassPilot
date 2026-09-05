@@ -7,13 +7,30 @@ Where the project runs, and what each machine can and cannot do.
 | Task | Windows (corporate) | macOS (personal) |
 |---|---|---|
 | Web app, `packages/shared`, unit tests, lint, typecheck | yes | yes |
-| Schema work against a **hosted** Supabase project (`db push`, `gen types`) | yes | yes |
-| **Local** Supabase stack (`supabase start`) | no — Docker is blocked by corporate policy | yes (Docker Desktop or Colima) |
+| Apply migrations / `pnpm db:types` via the Management API (HTTPS) | yes (with the CA bundle below) | yes |
+| **Local** Supabase stack (`supabase start` / `db reset`) | no — Docker is blocked by corporate policy | yes (Docker Desktop or Colima) |
+| `supabase db push` / `migration list` (direct Postgres connection) | **no — the corporate firewall blocks the PostgreSQL wire protocol** | yes |
 | Native iOS build, iOS Simulator, Maestro iOS E2E | no | yes (Xcode, ADR-006) |
 | CI (lint / typecheck / test, and later the DB stack) | — | runs on GitHub's Ubuntu runners, which have Docker |
 
-Backend and native-iOS work happens on the Mac. This is a consequence of
-ADR-006 and the Docker restriction, not a preference.
+The corporate Windows machine can do schema work only through the Supabase
+**Management API** (HTTPS 443): `pnpm db:query` and `pnpm db:types` both go that
+route. Anything needing a raw Postgres connection (`db push`, `db reset`,
+`migration list`, pgTAP) needs the Mac. Native-iOS work needs the Mac (ADR-006).
+
+## Corporate TLS-inspection proxy (Windows only)
+
+The corporate network re-signs HTTPS with an internal root CA. curl and browsers
+trust it (Windows cert store); Node does not, so `@supabase/supabase-js` and the
+Supabase CLI fail with `SELF_SIGNED_CERT_IN_CHAIN`. Fix, once per machine:
+
+```powershell
+pwsh -File scripts/export-corp-ca.ps1   # writes .certs/corp-ca.pem (git-ignored)
+```
+
+`scripts/db.mjs` (which backs every `pnpm db:*` script) picks the bundle up
+automatically when it exists. For ad-hoc Node scripts, set
+`NODE_EXTRA_CA_CERTS=$PWD/.certs/corp-ca.pem`. The Mac and CI need none of this.
 
 ## macOS prerequisites
 
@@ -92,12 +109,30 @@ Set these on the repo (`gh secret set NAME`, paste value when prompted):
 | `SUPABASE_ANON_KEY` | `.github/workflows/keepalive.yml` | `anon` key |
 | `SUPABASE_DB_URL` | `backup.yml` (added in M1.12) | Session-pooler URI with password |
 
-## Local vs remote schema work
+## Schema workflow
 
-- **With the local stack (Mac):** `supabase start`, then `supabase db reset`
-  applies `db/*.sql` and the seed. This is the M1.2 default.
-- **Without Docker (Windows, or a quick fix):** `supabase link --project-ref
-  $SUPABASE_PROJECT_REF` once, then `supabase db push` applies migrations
-  straight to the hosted project and `supabase gen types typescript --linked`
-  regenerates types. No local stack, but you are editing the shared hosted DB —
-  fine for a solo project, and the only option off the Mac.
+Migrations live in `supabase/migrations/<timestamp>_name.sql`, forward-only.
+`pnpm db:*` scripts wrap the Supabase CLI (`scripts/db.mjs` — loads `.env.local`,
+applies the CA bundle when present).
+
+| Command | What it does | Windows? |
+|---|---|---|
+| `pnpm db:query -- -f supabase/migrations/<file>.sql` | run SQL against the linked project via the **Management API** | yes |
+| `pnpm db:types` | regenerate `packages/shared/src/db/database.types.ts` (Management API) | yes |
+| `pnpm db:push` | apply pending migrations over a **direct Postgres connection** | no (firewall) — Mac only |
+| `pnpm db:reset` | reset the **local** stack to the migrations + seed | no (Docker) — Mac only |
+
+**Applying a new migration from Windows:** write the file under
+`supabase/migrations/`, run `pnpm db:query -- -f <that file>`, then record it so a
+later `db push` from the Mac skips it:
+
+```sh
+pnpm db:query -- "insert into supabase_migrations.schema_migrations (version, name) values ('<timestamp>', '<name>') on conflict do nothing;"
+pnpm db:types
+```
+
+**From the Mac** it is just `supabase db push` (or `supabase db reset` for the
+local stack), then `pnpm db:types`.
+
+The Phase-1 schema (`20260904090000_phase1_schema.sql`) has already been applied
+to the hosted project and recorded in migration history.
